@@ -1,0 +1,70 @@
+<section class="dashboard-body">
+  <div class="welcome-row">
+  <div>
+    <!-- Tambahkan id="dashboardUserName" di sini -->
+    <h1>Selamat Datang Kembali, <span id="dashboardUserName">Admin</span>! 👋</h1>
+    <p>Berikut adalah ringkasan aktivitas gudang hari ini.</p>
+    </div>
+    </div>
+    <div class="date-export">
+      <span class="date-badge"><i class="fa-regular fa-calendar"></i> Hari ini</span>
+      <button class="btn-primary" onclick="exportDataBackup()"><i class="fa-solid fa-download"></i> Export Backup</button>
+    </div>
+  </div>
+
+  <!-- STAT CARDS -->
+  <div class="stats-grid">
+    <div class="card stat-card">
+      <div class="card-header">
+        <span class="card-icon green"><i class="fa-solid fa-cubes"></i></span>
+        <span class="card-title">Total SKU Aktif</span>
+      </div>
+      <div class="card-value" id="dashTotalSku">0 <small>SKU</small></div>
+      <div class="card-status positive">Terdaftar di Gudang</div>
+    </div>
+
+    <div class="card stat-card">
+      <div class="card-header">
+        <span class="card-icon orange"><i class="fa-solid fa-warehouse"></i></span>
+        <span class="card-title">Total Rak Gudang</span>
+      </div>
+      <div class="card-value" id="dashTotalRacks">0 <small>Unit</small></div>
+      <div class="card-status positive">Kapasitas Penyimpanan</div>
+    </div>
+
+    <div class="card stat-card">
+      <div class="card-header">
+        <span class="card-icon blue"><i class="fa-solid fa-chart-pie"></i></span>
+        <span class="card-title">Rata-Rata Utilitas</span>
+      </div>
+      <div class="card-value" id="dashAvgUtil">0% <small>Terpakai</small></div>
+      <div class="card-status positive" id="dashUtilText">Status Optimal</div>
+    </div>
+  </div>
+
+  <!-- CONTENT GRID -->
+  <div class="content-grid">
+    <div class="left-col">
+      <div class="card chart-card">
+        <div class="card-flex-header">
+          <h3>Aktivitas Barang (Inbound vs Outbound)</h3>
+        </div>
+        <div class="chart-placeholder">
+          <canvas id="inventoryChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="right-col">
+      <div class="card action-card">
+        <h3>Aksi Cepat Transaksi</h3>
+        <div class="action-buttons">
+          <!-- Tombol aksi cepat menggunakan fungsi router agar tidak refresh -->
+          <a href="inbound.html" class="btn-action green" data-page="pages/inbound.html" data-script="inbound.js" onclick="switchPageFromLink(this, event)"><i class="fa-solid fa-truck-ramp-box"></i> Inbound Barang Masuk</a>
+          <a href="outbound.html" class="btn-action outline" data-page="pages/outbound.html" data-script="outbound.js" onclick="switchPageFromLink(this, event)"><i class="fa-solid fa-dolly"></i> Outbound Barang Keluar</a>
+          <a href="opname.html" class="btn-action outline" data-page="pages/opname.html" data-script="opname.js" onclick="switchPageFromLink(this, event)"><i class="fa-solid fa-boxes-packing"></i> Stock Opname Audit</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

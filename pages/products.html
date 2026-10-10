@@ -1,0 +1,151 @@
+<section class="dashboard-body">
+  <div class="welcome-row">
+    <div>
+      <h1>Master Products (Gudang Makanan)</h1>
+      <p>Kelola data barang, nomor batch, tanggal kedaluwarsa, dan posisi rak penyimpanan.</p>
+    </div>
+    <button class="btn-primary green" onclick="toggleAddModal(true)"><i class="fa-solid fa-plus"></i> Tambah Produk Baru</button>
+  </div>
+
+  <!-- TABLE CARD -->
+  <div class="card table-card">
+    <div class="card-flex-header">
+      <h3>Daftar Produk & Lokasi Rak</h3>
+      <span class="badge-count" id="totalProductCount">0 Produk</span>
+    </div>
+
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>SKU</th>
+            <th>Nama Produk</th>
+            <th>Kategori</th>
+            <th>Batch / Expired</th>
+            <th>UOM</th>
+            <th>Qty Stok</th>
+            <th>Lokasi Rak</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="productTableBody">
+          <!-- Inject dinamis via JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- MODAL TAMBAH PRODUK -->
+<div class="modal-overlay" id="addProductModal" style="display: none;">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3>Tambah Produk Baru</h3>
+      <button class="close-btn" type="button" onclick="toggleAddModal(false)">&times;</button>
+    </div>
+    <form id="addProductForm" onsubmit="saveNewProduct(event)">
+      <div class="form-grid">
+        
+        <div class="form-group">
+          <label>Jenis / Kategori Barang</label>
+          <select id="addCategorySelect" onchange="updateGeneratedSKU()" required>
+            <option value="" disabled selected>-- Pilih Jenis --</option>
+            <option value="BRM" data-category="Beras">Beras (BRM)</option>
+            <option value="GUL" data-category="Gula">Gula (GUL)</option>
+            <option value="TGP" data-category="Tepung">Tepung (TGP)</option>
+            <option value="MNY" data-category="Minyak">Minyak (MNY)</option>
+            <option value="MIE" data-category="Mi Instan">Mi Instan (MIE)</option>
+            <option value="SAU" data-category="Saus">Saus (SAU)</option>
+            <option value="BMB" data-category="Bumbu">Bumbu (BMB)</option>
+            <option value="KOP" data-category="Minuman">Kopi (KOP)</option>
+            <option value="TEH" data-category="Minuman">Teh (TEH)</option>
+            <option value="SRD" data-category="Makanan Kaleng">Sarden / Kaleng (SRD)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Nomor Urut SKU</label>
+          <input type="text" id="addSkuNumber" placeholder="Contoh: 004" onkeyup="updateGeneratedSKU()" required>
+        </div>
+
+        <div class="form-group full-width">
+          <label>Hasil Kode SKU (Otomatis)</label>
+          <input type="text" id="addSkuPreview" value="BRG-..." readonly style="background: #f1f5f9; font-weight: 700; color: #0f766e;">
+        </div>
+
+        <div class="form-group full-width">
+          <label>Nama Produk</label>
+          <input type="text" id="addName" placeholder="Contoh: Tepung Terigu 5 kg" required>
+        </div>
+
+        <div class="form-group">
+          <label>Gudang</label>
+          <select id="addWarehouseSelect" onchange="updateGeneratedLocation()" required>
+            <option value="WH-A">WH-A (Dry Food / Sembako)</option>
+            <option value="WH-B">WH-B (Bumbu & Minuman)</option>
+            <option value="WH-C">WH-C (Makanan Kaleng)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Blok Rak</label>
+          <select id="addZoneSelect" onchange="updateGeneratedLocation()" required>
+            <option value="A01">Blok A01 (Berat / Sembako)</option>
+            <option value="A02">Blok A02 (Berat / Tepung & Gula)</option>
+            <option value="B01">Blok B01 (Karton / Mi Instan)</option>
+            <option value="B02">Blok B02 (Botol / Saus & Kecap)</option>
+            <option value="B03">Blok B03 (Bumbu Sachet)</option>
+            <option value="C01">Blok C01 (Sachet / Minuman)</option>
+            <option value="C02">Blok C02 (Kaleng / Fast-moving)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Baris Rak (Row)</label>
+          <select id="addRowSelect" onchange="updateGeneratedLocation()" required>
+            <option value="R01">Baris R01</option>
+            <option value="R02">Baris R02</option>
+            <option value="R03">Baris R03</option>
+            <option value="R04">Baris R04</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Tingkat (Shelf Level)</label>
+          <select id="addShelfSelect" onchange="updateGeneratedLocation()" required>
+            <option value="S01">S01 (Tingkat Bawah - Heavy)</option>
+            <option value="S02">S02 (Tingkat Tengah - Medium)</option>
+            <option value="S03">S03 (Tingkat Atas - Light)</option>
+          </select>
+        </div>
+
+        <div class="form-group full-width">
+          <label>Hasil Kode Lokasi (Otomatis)</label>
+          <input type="text" id="addRackPreview" value="WH-A | A01-R01-S01" readonly style="background: #f1f5f9; font-weight: 700; color: #0f766e;">
+        </div>
+
+        <div class="form-group">
+          <label>No. Batch</label>
+          <input type="text" id="addBatch" placeholder="TGP260703" required>
+        </div>
+        <div class="form-group">
+          <label>Expired Date</label>
+          <input type="text" id="addExpired" placeholder="07/2028" required>
+        </div>
+        <div class="form-group">
+          <label>Satuan (UOM)</label>
+          <input type="text" id="addUom" placeholder="Sak / Pcs / Dus" required>
+        </div>
+        <div class="form-group">
+          <label>Qty Stok Initial</label>
+          <input type="number" id="addQty" placeholder="100" required>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" onclick="toggleAddModal(false)">Batal</button>
+        <button type="submit" class="btn-primary green">Simpan Produk</button>
+      </div>
+    </form>
+  </div>
+</div>

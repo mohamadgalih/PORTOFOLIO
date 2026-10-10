@@ -1,0 +1,97 @@
+<section class="dashboard-body">
+  <div class="welcome-row">
+    <div>
+      <h1>Outbound Management (Barang Keluar)</h1>
+      <p>Catat dan pantau pengeluaran/pengiriman barang keluar dari gudang, nomor referensi DO, tujuan, dan pengurangan stok otomatis.</p>
+    </div>
+    <button class="btn-primary green" onclick="toggleOutboundModal(true)"><i class="fa-solid fa-plus"></i> Catat Outbound Baru</button>
+  </div>
+
+  <!-- TABLE CARD -->
+  <div class="card table-card">
+    <div class="card-flex-header">
+      <h3>Riwayat Transaksi Outbound</h3>
+      <div style="display: flex; gap: 12px; align-items: center;">
+        <!-- Fitur Search Real-time untuk Outbound -->
+        <div style="position: relative;">
+          <input type="text" id="searchOutboundInput" placeholder="Cari DO, Tujuan, SKU..." onkeyup="filterOutbound()" style="padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; width: 220px;">
+        </div>
+        <span class="badge-count" id="outboundBadgeCount">0 Transaksi</span>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>No. Transaksi / DO</th>
+            <th>Tanggal Keluar</th>
+            <th>Tujuan / Customer</th>
+            <th>SKU & Nama Produk</th>
+            <th>Qty Keluar</th>
+            <th>Petugas</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="outboundTableBody">
+          <!-- Data outbound akan dirender dinamis via JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- MODAL TAMBAH OUTBOUND -->
+<div class="modal-overlay" id="addOutboundModal" style="display: none; align-items: center; justify-content: center;">
+  <div class="modal-card" style="max-height: 90vh; overflow-y: auto;">
+    <div class="modal-header">
+      <h3>Catat Outbound Barang Keluar</h3>
+      <button class="close-btn" type="button" onclick="toggleOutboundModal(false)">&times;</button>
+    </div>
+    <form id="addOutboundForm" onsubmit="saveNewOutbound(event)">
+      <div class="form-grid">
+        <div class="form-group full-width">
+          <label>No. Referensi / DO</label>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span style="font-weight: 600; color: #64748b; font-size: 13px; background: #f1f5f9; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px;">DO-OUT-2026-</span>
+            <input type="text" id="outboundRefNum" placeholder="011" required style="flex: 1;">
+          </div>
+          <small style="color: #64748b; font-size: 11px;">Cukup masukkan nomor urutnya saja (misal: 011)</small>
+        </div>
+
+        <div class="form-group full-width">
+          <label>Tanggal Keluar</label>
+          <input type="date" id="outboundDate" required>
+        </div>
+
+        <div class="form-group full-width">
+          <label>Pilih Produk (Master Products)</label>
+          <select id="outboundProductSku" required>
+            <option value="" disabled selected>-- Pilih Produk SKU --</option>
+            <!-- Diisi otomatis via JavaScript -->
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Jumlah Qty Keluar</label>
+          <input type="number" id="outboundQty" placeholder="50" min="1" required>
+        </div>
+
+        <div class="form-group">
+          <label>Tujuan / Customer</label>
+          <input type="text" id="outboundDestination" placeholder="Toko Sembako Berkah Jaya" required>
+        </div>
+
+        <div class="form-group full-width">
+          <label>Nama Petugas Pengirim</label>
+          <input type="text" id="outboundDispatcher" placeholder="Admin Gudang A" required>
+        </div>
+      </div>
+
+      <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px; padding-top: 15px; border-top: 1px solid #e2e8f0;">
+        <button type="button" class="btn-secondary" onclick="toggleOutboundModal(false)">Batal</button>
+        <button type="submit" class="btn-primary green">Simpan & Kurangi Stok</button>
+      </div>
+    </form>
+  </div>
+</div>

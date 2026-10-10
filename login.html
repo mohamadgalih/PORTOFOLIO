@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - WMS Pro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+
+  <div class="login-container">
+    <div class="login-card">
+      <div class="brand-header">
+        <i class="fa-solid fa-boxes-stacked brand-icon"></i>
+        <h2>WMS Pro</h2>
+        <p>Aplikasi Manajemen Gudang Makanan</p>
+      </div>
+
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label for="adminName">Nama Admin / ID</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-user icon-left"></i>
+            <input type="text" id="adminName" placeholder="Masukkan nama kamu..." required>
+          </div>
+          <small class="id-hint">ID : Bebas (Isi nama kamu)</small>
+        </div>
+
+        <div class="form-group">
+          <label for="adminPassword">Password Portal</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-lock icon-left"></i>
+            <input type="password" id="adminPassword" placeholder="Masukkan password" required>
+            <i class="fa-regular fa-eye icon-toggle-pwd" id="togglePasswordBtn" onclick="togglePasswordVisibility()"></i>
+          </div>
+          <small class="pwd-hint">Pw : WarungJepang02</small>
+        </div>
+
+        <div id="errorMessage" class="error-message" style="display: none;">
+          <i class="fa-solid fa-circle-exclamation"></i> Password salah! Akses ditolak.
+        </div>
+
+        <button type="submit" class="btn-login">Masuk ke Sistem <i class="fa-solid fa-arrow-right"></i></button>
+      </form>
+    </div>
+  </div>
+
+  <script src="login.js"></script>
+</body>
+</html>

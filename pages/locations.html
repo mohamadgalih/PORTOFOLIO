@@ -1,0 +1,107 @@
+<section class="dashboard-body">
+  <div class="welcome-row">
+    <div>
+      <h1>Locations & Racks (Tata Letak Gudang)</h1>
+      <p>Kelola zona gudang, blok rak, baris, tingkat, serta kapasitas utilitas penyimpanan.</p>
+    </div>
+    <button class="btn-primary green" onclick="toggleLocationModal(true)"><i class="fa-solid fa-plus"></i> Tambah Lokasi Rak</button>
+  </div>
+
+  <!-- STATS RACK -->
+  <div class="stats-grid">
+    <div class="card stat-card">
+      <div class="card-header">
+        <span class="card-icon green"><i class="fa-solid fa-warehouse"></i></span>
+        <span class="card-title">Total Unit Rak</span>
+      </div>
+      <div class="card-value" id="totalRackCount">0 <small>Rak</small></div>
+      <div class="card-status positive">Aktif Digunakan</div>
+    </div>
+    <div class="card stat-card">
+      <div class="card-header">
+        <span class="card-icon blue"><i class="fa-solid fa-boxes-stacked"></i></span>
+        <span class="card-title">Kapasitas Maksimal</span>
+      </div>
+      <div class="card-value" id="totalMaxCapacity">0 <small>Pallet / Slot</small></div>
+      <div class="card-status positive">Kapasitas Gudang</div>
+    </div>
+  </div>
+
+  <!-- TABLE CARD -->
+  <div class="card table-card">
+    <div class="card-flex-header">
+      <h3>Daftar Zona & Rak Penyimpanan</h3>
+      <span class="badge-count" id="rackBadgeCount">0 Lokasi</span>
+    </div>
+
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Kode Lokasi</th>
+            <th>Gudang (Warehouse)</th>
+            <th>Blok / Zona</th>
+            <th>Kategori Peruntukan</th>
+            <th>Kapasitas Slot</th>
+            <th>Status</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="locationTableBody">
+          <!-- Data rak akan dirender dinamis via JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- MODAL TAMBAH LOKASI RAK -->
+<div class="modal-overlay" id="addLocationModal" style="display: none;">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3>Tambah Lokasi Rak Baru</h3>
+      <button class="close-btn" type="button" onclick="toggleLocationModal(false)">&times;</button>
+    </div>
+    <form id="addLocationForm" onsubmit="saveNewLocation(event)">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Gudang</label>
+          <select id="locWarehouse" required>
+            <option value="WH-A">WH-A (Dry Food / Sembako)</option>
+            <option value="WH-B">WH-B (Bumbu & Minuman)</option>
+            <option value="WH-C">WH-C (Makanan Kaleng)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Kode Blok / Zona</label>
+          <input type="text" id="locZone" placeholder="Contoh: A01, B02, C01" required>
+        </div>
+
+        <div class="form-group full-width">
+          <label>Peruntukan Kategori Barang</label>
+          <input type="text" id="locCategory" placeholder="Contoh: Beras, Minyak & Sembako Berat" required>
+        </div>
+
+        <div class="form-group">
+          <label>Kapasitas Maksimal (Slot/Pallet)</label>
+          <input type="number" id="locCapacity" placeholder="100" required>
+        </div>
+
+        <div class="form-group">
+          <label>Status Rak</label>
+          <select id="locStatus" required>
+            <option value="Aktif">Aktif</option>
+            <option value="Maintenance">Maintenance</option>
+            <option value="Penuh">Penuh</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" onclick="toggleLocationModal(false)">Batal</button>
+        <button type="submit" class="btn-primary green">Simpan Lokasi</button>
+      </div>
+    </form>
+  </div>
+</div>

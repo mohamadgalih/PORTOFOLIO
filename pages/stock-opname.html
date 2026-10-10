@@ -1,0 +1,98 @@
+<section class="dashboard-body">
+  <div class="welcome-row">
+    <div>
+      <h1>Stock Opname (Audit Fisik Gudang)</h1>
+      <p>Lakukan opname dan audit berkala untuk mencocokkan stok sistem dengan fisik gudang, serta pantau selisih (variance).</p>
+    </div>
+    <button class="btn-primary green" onclick="toggleSOModal(true)"><i class="fa-solid fa-plus"></i> Buat Jadwal / Sesi SO Baru</button>
+  </div>
+
+  <!-- TABLE CARD -->
+  <div class="card table-card">
+    <div class="card-flex-header">
+      <h3>Riwayat & Daftar Sesi Stock Opname</h3>
+      <div style="display: flex; gap: 12px; align-items: center;">
+        <!-- Fitur Search Real-time untuk Stock Opname -->
+        <div style="position: relative;">
+          <input type="text" id="searchSOInput" placeholder="Cari No. SO, SKU, Petugas..." onkeyup="filterSO()" style="padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; width: 220px;">
+        </div>
+        <span class="badge-count" id="soBadgeCount">0 Sesi</span>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>No. Sesi SO</th>
+            <th>Tanggal Audit</th>
+            <th>SKU & Nama Produk</th>
+            <th>Stok Sistem</th>
+            <th>Stok Fisik</th>
+            <th>Selisih (Variance)</th>
+            <th>Status / Keterangan</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="soTableBody">
+          <!-- Data stock opname akan dirender dinamis via JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- MODAL TAMBAH STOCK OPNAME -->
+<div class="modal-overlay" id="addSOModal" style="display: none; align-items: center; justify-content: center;">
+  <div class="modal-card" style="max-height: 90vh; overflow-y: auto;">
+    <div class="modal-header">
+      <h3>Catat Sesi Stock Opname Baru</h3>
+      <button class="close-btn" type="button" onclick="toggleSOModal(false)">&times;</button>
+    </div>
+    <form id="addSOForm" onsubmit="saveNewSO(event)">
+      <div class="form-grid">
+        <div class="form-group full-width">
+          <label>No. Sesi / Referensi SO</label>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span style="font-weight: 600; color: #64748b; font-size: 13px; background: #f1f5f9; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px;">SO-2026-</span>
+            <input type="text" id="soRefNum" placeholder="001" required style="flex: 1;">
+          </div>
+          <small style="color: #64748b; font-size: 11px;">Cukup masukkan nomor urutnya saja (misal: 001)</small>
+        </div>
+
+        <div class="form-group full-width">
+          <label>Tanggal Audit</label>
+          <input type="date" id="soDate" required>
+        </div>
+
+        <div class="form-group full-width">
+          <label>Pilih Produk (Master Products)</label>
+          <select id="soProductSku" onchange="updateSystemStockPreview()" required>
+            <option value="" disabled selected>-- Pilih Produk SKU --</option>
+            <!-- Diisi otomatis via JavaScript -->
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Stok Sistem Saat Ini</label>
+          <input type="text" id="soSystemQty" readonly style="background: #f8fafc; color: #64748b; font-weight: bold;">
+        </div>
+
+        <div class="form-group">
+          <label>Jumlah Stok Fisik (Hasil Hitung)</label>
+          <input type="number" id="soPhysicalQty" placeholder="Masukkan hasil fisik" min="0" required>
+        </div>
+
+        <div class="form-group full-width">
+          <label>Catatan / Alasan Selisih (Jika ada)</label>
+          <input type="text" id="soNotes" placeholder="Contoh: Sesuai fisik / Ada selisih rusak 2 pcs">
+        </div>
+      </div>
+
+      <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px; padding-top: 15px; border-top: 1px solid #e2e8f0;">
+        <button type="button" class="btn-secondary" onclick="toggleSOModal(false)">Batal</button>
+        <button type="submit" class="btn-primary green">Simpan & Audit</button>
+      </div>
+    </form>
+  </div>
+</div>

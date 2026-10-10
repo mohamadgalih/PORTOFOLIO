@@ -1,0 +1,97 @@
+<section class="dashboard-body">
+  <div class="welcome-row">
+    <div>
+      <h1>Inbound Management (Barang Masuk)</h1>
+      <p>Catat dan pantau penerimaan barang masuk ke gudang, nomor referensi PO, supplier, dan update stok otomatis.</p>
+    </div>
+    <button class="btn-primary green" onclick="toggleInboundModal(true)"><i class="fa-solid fa-plus"></i> Catat Inbound Baru</button>
+  </div>
+
+  <!-- TABLE CARD -->
+  <div class="card table-card">
+    <div class="card-flex-header">
+      <h3>Riwayat Transaksi Inbound</h3>
+      <div style="display: flex; gap: 12px; align-items: center;">
+        <!-- Fitur Search Real-time untuk Inbound -->
+        <div style="position: relative;">
+          <input type="text" id="searchInboundInput" placeholder="Cari PO, Supplier, SKU..." onkeyup="filterInbound()" style="padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; width: 220px;">
+        </div>
+        <span class="badge-count" id="inboundBadgeCount">0 Transaksi</span>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>No. Transaksi / PO</th>
+            <th>Tanggal Masuk</th>
+            <th>Supplier</th>
+            <th>SKU & Nama Produk</th>
+            <th>Qty Masuk</th>
+            <th>Penerima</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="inboundTableBody">
+          <!-- Data inbound akan dirender dinamis via JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- MODAL TAMBAH INBOUND -->
+<div class="modal-overlay" id="addInboundModal" style="display: none; align-items: center; justify-content: center;">
+  <div class="modal-card" style="max-height: 90vh; overflow-y: auto;">
+    <div class="modal-header">
+      <h3>Catat Inbound Barang Masuk</h3>
+      <button class="close-btn" type="button" onclick="toggleInboundModal(false)">&times;</button>
+    </div>
+    <form id="addInboundForm" onsubmit="saveNewInbound(event)">
+      <div class="form-grid">
+        <div class="form-group full-width">
+          <label>No. Referensi / PO</label>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span style="font-weight: 600; color: #64748b; font-size: 13px; background: #f1f5f9; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px;">PO-IN-2026-</span>
+            <input type="text" id="inboundRefNum" placeholder="011" required style="flex: 1;">
+          </div>
+          <small style="color: #64748b; font-size: 11px;">Cukup masukkan nomor urutnya saja (misal: 011)</small>
+        </div>
+
+        <div class="form-group full-width">
+          <label>Tanggal Masuk</label>
+          <input type="date" id="inboundDate" required>
+        </div>
+
+        <div class="form-group full-width">
+          <label>Pilih Produk (Master Products)</label>
+          <select id="inboundProductSku" required>
+            <option value="" disabled selected>-- Pilih Produk SKU --</option>
+            <!-- Diisi otomatis via JavaScript -->
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Jumlah Qty Masuk</label>
+          <input type="number" id="inboundQty" placeholder="100" min="1" required>
+        </div>
+
+        <div class="form-group">
+          <label>Nama Supplier</label>
+          <input type="text" id="inboundSupplier" placeholder="PT Sumber Pangan Utama" required>
+        </div>
+
+        <div class="form-group full-width">
+          <label>Nama Petugas Penerima</label>
+          <input type="text" id="inboundReceiver" placeholder="Admin Gudang A" required>
+        </div>
+      </div>
+
+      <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px; padding-top: 15px; border-top: 1px solid #e2e8f0;">
+        <button type="button" class="btn-secondary" onclick="toggleInboundModal(false)">Batal</button>
+        <button type="submit" class="btn-primary green">Simpan & Update Stok</button>
+      </div>
+    </form>
+  </div>
+</div>

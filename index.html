@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WMS Pro - Warehouse Management System</title>
+  
+  <!-- SCRIPT PROTEKSI LOGIN (Harus di paling atas agar langsung nge-block jika belum login) -->
+  <script>
+    if (localStorage.getItem('wms_logged_in') !== 'true') {
+      window.location.href = 'login.html';
+    }
+  </script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- CSS Global / Modul -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="products.css">
+  <link rel="stylesheet" href="locations.css">
+  <link rel="stylesheet" href="inbound.css">
+  <link rel="stylesheet" href="outbound.css">
+  <link rel="stylesheet" href="opname.css">
+  <link rel="stylesheet" href="setting.css">
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- SIDEBAR UTAMA (TIDAK AKAN IKUT REFRESH) -->
+    <aside class="sidebar">
+      <div class="brand">
+        <i class="fa-solid fa-boxes-stacked brand-icon"></i>
+        <h2>WMS Pro</h2>
+      </div>
+
+      <nav class="nav-menu" id="navMenu">
+        <div class="nav-indicator" id="navIndicator"></div>
+
+        <span class="menu-label">MAIN MENU</span>
+        <a href="dashboard" class="nav-item active" data-page="pages/dashboard.html" data-script="script.js" onclick="switchPage(this, event)">
+          <i class="fa-solid fa-chart-pie"></i> <span>Dashboard</span>
+        </a>
+        <a href="products" class="nav-item" data-page="pages/products.html" data-script="products.js" onclick="switchPage(this, event)">
+          <i class="fa-solid fa-box"></i> <span>Master Products</span>
+        </a>
+        <a href="locations" class="nav-item" data-page="pages/locations.html" data-script="locations.js" onclick="switchPage(this, event)">
+          <i class="fa-solid fa-warehouse"></i> <span>Locations & Racks</span>
+        </a>
+        
+        <span class="menu-label">TRANSACTIONS</span>
+        <a href="inbound" class="nav-item" data-page="pages/inbound.html" data-script="inbound.js" onclick="switchPage(this, event)">
+          <i class="fa-solid fa-truck-ramp-box"></i> <span>Inbound (Receiving)</span>
+        </a>
+        <a href="outbound" class="nav-item" data-page="pages/outbound.html" data-script="outbound.js" onclick="switchPage(this, event)">
+          <i class="fa-solid fa-dolly"></i> <span>Outbound (Picking)</span>
+        </a>
+        <a href="#" class="nav-item" data-page="pages/stock-opname.html" data-script="stock-opname.js" onclick="switchPage(this, event)">
+          <i class="fa-solid fa-clipboard-check"></i> <span>Stock Opname</span>
+        </a>
+        
+        <span class="menu-label">SYSTEM</span>
+        <a href="#" class="nav-item" data-page="pages/setting.html" data-script="setting.js" onclick="switchPage(this, event)">
+          <i class="fa-solid fa-gear"></i> <span>Pengaturan</span>
+        </a>
+        <a href="#" class="nav-item" onclick="toggleLogoutModal(true); return false;">
+          <i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="main-content">
+      <!-- HEADER (TIDAK IKUT REFRESH) -->
+      <header class="top-header">
+        <div class="search-bar">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="globalSearchInput" placeholder="Cari data WMS Pro...">
+        </div>
+        <div class="header-actions">
+          <button class="icon-btn"><i class="fa-regular fa-bell"></i></button>
+          
+          <!-- FOTO PROFIL DI KLIK UNTUK MEMBUKA MODAL PROFIL -->
+          <div class="user-profile" onclick="toggleProfileModal(true)" style="cursor: pointer;" title="Klik untuk Edit Profil">
+            <img id="headerAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100" alt="User Avatar" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+          </div>
+        </div>
+      </header>
+
+      <!-- TEMPAT KONTEN HALAMAN & MODAL AKAN DIMUAT DINAMIS -->
+      <div id="dynamic-content-wrapper">
+        <!-- Konten dari file HTML halaman akan masuk ke sini -->
+      </div>
+    </main>
+  </div>
+
+  <!-- MODAL POPUP PROFIL (DIBUKA DARI FOTO PROFIL HEADER) -->
+  <div class="modal-overlay" id="profileModal" style="display: none; align-items: center; justify-content: center;">
+    <div class="modal-card" style="max-width: 400px; width: 100%;">
+      <div class="modal-header">
+        <h3>Profil Pengguna & Akun</h3>
+        <button class="close-btn" type="button" onclick="toggleProfileModal(false)">&times;</button>
+      </div>
+      <form id="profileForm" onsubmit="saveUserProfile(event)">
+        <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 20px;">
+          <!-- Preview Foto Profil -->
+          <div style="position: relative; width: 90px; height: 90px; margin-bottom: 12px;">
+            <img id="modalProfilePreview" src="" alt="Foto Profil" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid #0f766e;">
+          </div>
+          <label for="profileImageInput" style="background: #f1f5f9; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; border: 1px solid #cbd5e1; color: #334155;">
+            <i class="fa-solid fa-camera"></i> Ganti Foto Profil
+          </label>
+          <input type="file" id="profileImageInput" accept="image/*" style="display: none;" onchange="previewProfileImage(event)">
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label>Nama Lengkap</label>
+            <input type="text" id="profileName" required style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px;">
+          </div>
+          <div class="form-group full-width" style="margin-top: 12px;">
+            <label>Jabatan / Peran</label>
+            <input type="text" id="profileRole" required style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px;">
+          </div>
+        </div>
+
+        <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; padding-top: 15px; border-top: 1px solid #e2e8f0;">
+          <button type="button" class="btn-secondary" onclick="toggleProfileModal(false)" style="padding: 8px 16px; border: 1px solid #cbd5e1; background: #f1f5f9; border-radius: 6px; cursor: pointer;">Batal</button>
+          <button type="submit" class="btn-primary" style="padding: 8px 16px; background: #0f766e; color: white; border: none; border-radius: 6px; cursor: pointer;">Simpan Perubahan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL KONFIRMASI LOGOUT -->
+  <div class="modal-overlay" id="logoutModal" style="display: none; align-items: center; justify-content: center;">
+    <div class="modal-card logout-card" style="max-width: 380px; width: 100%; text-align: center; padding: 24px; background: white; border-radius: 16px;">
+      <div class="logout-icon-wrapper" style="font-size: 32px; color: #ef4444; margin-bottom: 12px;">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+      </div>
+      <h3 style="margin-bottom: 8px; color: #1e293b;">Konfirmasi Logout</h3>
+      <p style="color: #64748b; font-size: 14px; margin-bottom: 20px;">Apakah kamu yakin ingin keluar dari sistem WMS Pro?</p>
+      <div class="logout-modal-footer" style="display: flex; justify-content: center; gap: 12px;">
+        <button type="button" class="btn-secondary" onclick="toggleLogoutModal(false)" style="padding: 8px 16px; border: 1px solid #cbd5e1; background: #f1f5f9; border-radius: 6px; cursor: pointer;">Batal</button>
+        <button type="button" class="btn-danger" onclick="confirmLogout()" style="padding: 8px 16px; background: #ef4444; color: white; border: none; border-radius: 6px; cursor: pointer;">Ya, Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chart.js dan Script Utama -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="router.js"></script>
+  <script src="setting.js"></script>
+</body>
+</html>

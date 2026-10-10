@@ -1,0 +1,67 @@
+<section class="dashboard-body">
+  <div class="welcome-row">
+    <div>
+      <h1>Pengaturan Sistem & Profil Gudang</h1>
+      <p>Kelola informasi identitas gudang, preferensi operasional, dan pemeliharaan database lokal (LocalStorage).</p>
+    </div>
+  </div>
+
+  <!-- KARTU PENGATURAN PROFIL GUDANG -->
+  <div class="card" style="margin-bottom: 24px; padding: 24px;">
+    <h3 style="margin-bottom: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; color: #1e293b;">
+      <i class="fa-solid fa-warehouse" style="margin-right: 8px; color: #0f172a;"></i> Profil & Identitas Gudang
+    </h3>
+    <form id="settingForm" onsubmit="saveWarehouseSettings(event)">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nama Gudang / Cabang</label>
+          <input type="text" id="whName" placeholder="Contoh: Warehouse Pusat Bekasi" required>
+        </div>
+
+        <div class="form-group">
+          <label>Kode / ID Gudang</label>
+          <input type="text" id="whCode" placeholder="Contoh: WH-BKS-01" required>
+        </div>
+
+        <div class="form-group full-width">
+          <label>Alamat Lengkap Gudang</label>
+          <input type="text" id="whAddress" placeholder="Contoh: Jl. Industri Raya No. 88, Cikarang" required>
+        </div>
+
+        <div class="form-group">
+          <label>Penanggung Jawab / Kepala Gudang</label>
+          <input type="text" id="whManager" placeholder="Contoh: Budi Santoso, S.T." required>
+        </div>
+
+        <div class="form-group">
+          <label>Nomor Kontak / Telepon</label>
+          <input type="text" id="whPhone" placeholder="Contoh: 0812-3456-7890" required>
+        </div>
+      </div>
+
+      <div style="margin-top: 20px; display: flex; justify-content: flex-end;">
+        <button type="submit" class="btn-primary green"><i class="fa-solid fa-floppy-disk"></i> Simpan Pengaturan</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- KARTU UTILITAS & MANAJEMEN DATA -->
+  <div class="card" style="padding: 24px;">
+    <h3 style="margin-bottom: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; color: #1e293b;">
+      <i class="fa-solid fa-database" style="margin-right: 8px; color: #0f172a;"></i> Manajemen Database & Sistem (LocalStorage)
+    </h3>
+    <p style="color: #64748b; font-size: 14px; margin-bottom: 20px;">
+      Tindakan di bawah ini akan memengaruhi seluruh data transaksi, produk, rak, inbound, outbound, dan stock opname yang tersimpan di browser.
+    </p>
+
+    <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+      <button type="button" class="btn-secondary" onclick="exportWMSData()" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 10px 16px; border-radius: 6px; cursor: pointer; font-weight: 500;">
+        <i class="fa-solid fa-file-arrow-down" style="margin-right: 6px;"></i> Export Data (Backup JSON)
+      </button>
+
+      <button type="button" class="btn-secondary" onclick="resetWMSDatabase()" style="background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; padding: 10px 16px; border-radius: 6px; cursor: pointer; font-weight: 500;">
+        <i class="fa-solid fa-triangle-exclamation" style="margin-right: 6px;"></i> Reset / Bersihkan Semua Data WMS
+      </button>
+    </div>
+  </div>
+</section>
